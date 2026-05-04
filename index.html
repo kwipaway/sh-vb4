@@ -1362,15 +1362,60 @@ window.difyChatbotConfig = {
     z-index: 9998 !important;
     width: 23rem !important;
     height: 38rem !important;
-
-    /* Match site card style */
     border-radius: 10px !important;
     border: 1.5px solid #dde2ec !important;
     box-shadow: 0 8px 40px rgba(28,43,74,.18) !important;
     overflow: hidden !important;
+    transition: box-shadow .15s !important;
   }
 
-  /* ── Small screens: make window narrower and shorter ── */
+  /* ── Resize handle (top-left corner) ── */
+  #chat-resize-handle {
+    position: fixed;
+    width: 18px;
+    height: 18px;
+    z-index: 10000;
+    cursor: nw-resize;
+    /* Visible grip dots */
+    background-image:
+      radial-gradient(circle, #aab0be 1.5px, transparent 1.5px),
+      radial-gradient(circle, #aab0be 1.5px, transparent 1.5px),
+      radial-gradient(circle, #aab0be 1.5px, transparent 1.5px),
+      radial-gradient(circle, #aab0be 1.5px, transparent 1.5px);
+    background-size: 6px 6px;
+    background-position: 0 0, 6px 0, 0 6px, 6px 6px;
+    background-repeat: no-repeat;
+    opacity: .55;
+    border-radius: 4px 0 0 0;
+    transition: opacity .15s;
+  }
+  #chat-resize-handle:hover { opacity: 1; }
+
+  /* ── Expand/collapse toggle button ── */
+  #chat-expand-btn {
+    position: fixed;
+    z-index: 10000;
+    width: 26px;
+    height: 26px;
+    background: #1c2b4a;
+    border: 1.5px solid rgba(255,255,255,.2);
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    color: #fff;
+    opacity: .75;
+    transition: opacity .15s, background .15s;
+    user-select: none;
+  }
+  #chat-expand-btn:hover { opacity: 1; background: #c05a10; }
+
+  /* ── Active resize cursor on body ── */
+  body.chat-resizing { cursor: nw-resize !important; user-select: none !important; }
+
+  /* ── Small screens ── */
   @media (max-width: 520px) {
     #dify-chatbot-bubble-window {
       width: calc(100vw - 24px) !important;
@@ -1382,8 +1427,136 @@ window.difyChatbotConfig = {
       right: 16px !important;
       bottom: 20px !important;
     }
+    #chat-resize-handle,
+    #chat-expand-btn { display: none !important; }
   }
 </style>
+
+<script>
+(function () {
+  const MARGIN   = 16;   // min gap from viewport edges
+  const MIN_W    = 260;
+  const MIN_H    = 300;
+  const DEFAULT_W = 368; // 23rem
+  const DEFAULT_H = 608; // 38rem
+  const EXPANDED_W = Math.min(600, window.innerWidth  - MARGIN * 2);
+  const EXPANDED_H = Math.min(720, window.innerHeight - 110);
+
+  let resizeHandle, expandBtn;
+  let isResizing = false, isExpanded = false;
+  let startX, startY, startW, startH;
+
+  /* ── Wait for Dify to inject its window ── */
+  const observer = new MutationObserver(() => {
+    const win = document.getElementById('dify-chatbot-bubble-window');
+    if (win && !document.getElementById('chat-resize-handle')) {
+      init(win);
+    }
+    /* Show/hide our controls when Dify shows/hides its window */
+    if (resizeHandle && expandBtn) {
+      const visible = win && win.style.display !== 'none'
+                           && win.style.visibility !== 'hidden'
+                           && !win.hidden;
+      resizeHandle.style.display = visible ? '' : 'none';
+      expandBtn.style.display    = visible ? '' : 'none';
+      if (visible) positionControls(win);
+    }
+  });
+  observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['style'] });
+
+  function init(win) {
+    /* ── Resize handle ── */
+    resizeHandle = document.createElement('div');
+    resizeHandle.id = 'chat-resize-handle';
+    document.body.appendChild(resizeHandle);
+
+    /* ── Expand button ── */
+    expandBtn = document.createElement('div');
+    expandBtn.id = 'chat-expand-btn';
+    expandBtn.title = 'Expand / Collapse';
+    expandBtn.textContent = '⛶';
+    document.body.appendChild(expandBtn);
+
+    positionControls(win);
+
+    /* ── Resize: drag ── */
+    resizeHandle.addEventListener('mousedown', function (e) {
+      isResizing = true;
+      startX = e.clientX;
+      startY = e.clientY;
+      startW = win.offsetWidth;
+      startH = win.offsetHeight;
+      document.body.classList.add('chat-resizing');
+      e.preventDefault();
+    });
+
+    document.addEventListener('mousemove', function (e) {
+      if (!isResizing) return;
+      const maxW = window.innerWidth  - MARGIN * 2;
+      const maxH = window.innerHeight - 110;
+
+      /* Window is anchored bottom-right, so dragging left/up grows it */
+      const newW = clamp(startW + (startX - e.clientX), MIN_W, maxW);
+      const newH = clamp(startH + (startY - e.clientY), MIN_H, maxH);
+
+      win.style.setProperty('width',  newW + 'px', 'important');
+      win.style.setProperty('height', newH + 'px', 'important');
+      positionControls(win);
+    });
+
+    document.addEventListener('mouseup', function () {
+      if (isResizing) {
+        isResizing = false;
+        document.body.classList.remove('chat-resizing');
+      }
+    });
+
+    /* ── Expand / collapse ── */
+    expandBtn.addEventListener('click', function () {
+      isExpanded = !isExpanded;
+      if (isExpanded) {
+        win.style.setProperty('width',  EXPANDED_W + 'px', 'important');
+        win.style.setProperty('height', EXPANDED_H + 'px', 'important');
+        expandBtn.textContent = '⊡';
+        expandBtn.title = 'Restore size';
+      } else {
+        win.style.setProperty('width',  DEFAULT_W + 'px', 'important');
+        win.style.setProperty('height', DEFAULT_H + 'px', 'important');
+        expandBtn.textContent = '⛶';
+        expandBtn.title = 'Expand';
+      }
+      positionControls(win);
+    });
+
+    /* ── Reposition on window resize ── */
+    window.addEventListener('resize', function () {
+      const w = win.offsetWidth, h = win.offsetHeight;
+      const maxW = window.innerWidth  - MARGIN * 2;
+      const maxH = window.innerHeight - 110;
+      if (w > maxW) win.style.setProperty('width',  maxW + 'px', 'important');
+      if (h > maxH) win.style.setProperty('height', maxH + 'px', 'important');
+      positionControls(win);
+    });
+  }
+
+  /* Place handle at top-left corner of the chat window, expand btn just right of it */
+  function positionControls(win) {
+    const rect = win.getBoundingClientRect();
+    if (resizeHandle) {
+      resizeHandle.style.top  = rect.top  + 'px';
+      resizeHandle.style.left = rect.left + 'px';
+    }
+    if (expandBtn) {
+      expandBtn.style.top  = (rect.top  + 2) + 'px';
+      expandBtn.style.left = (rect.left + 22) + 'px';
+    }
+  }
+
+  function clamp(val, min, max) {
+    return Math.min(max, Math.max(min, val));
+  }
+})();
+</script>
 
 <script>
 const PAGES = ['home','federal','hazlewood','active','faq','contact'];
