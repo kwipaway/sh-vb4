@@ -1,6 +1,843 @@
-<!Doctype html>
+<!DOCTYPE html>
 <html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Veterans Benefits Processing | Sam Houston State University</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --navy-mid: #112240;
+    --orange: #e8651a;
+    --orange-light: #f07d38;
+    --gold: #c9a84c;
+    --cream: #f5f0e8;
+    --white: #ffffff;
+    --gray-soft: #f0ede8;
+    --gray-mid: #8a9ab0;
+    --text: #1a2540;
+  }
 
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+  html { scroll-behavior: smooth; }
 
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    background: var(--navy);
+    padding: 10px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.78rem;
+    color: var(--gray-mid);
+    letter-spacing: 0.04em;
+  }
+  .topbar a { color: var(--gold); text-decoration: none; }
+  .topbar a:hover { color: var(--orange-light); }
+
+  /* ── NAV ── */
+  nav {
+    background: var(--white);
+    border-bottom: 3px solid var(--orange);
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: var(--navy);
+    padding: 16px 0;
+    margin-right: auto;
+    text-decoration: none;
+    letter-spacing: -0.01em;
+  }
+  .nav-logo span { color: var(--orange); }
+  nav a.nav-link {
+    display: block;
+    padding: 20px 18px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -3px;
+    transition: color 0.2s, border-color 0.2s;
+    white-space: nowrap;
+  }
+  nav a.nav-link:hover, nav a.nav-link.active {
+    color: var(--orange);
+    border-bottom-color: var(--orange);
+  }
+  .nav-cta {
+    margin-left: 18px;
+    background: var(--orange);
+    color: var(--white) !important;
+    padding: 10px 20px !important;
+    border-radius: 4px;
+    border-bottom: none !important;
+    margin-bottom: 0 !important;
+  }
+  .nav-cta:hover { background: var(--orange-light); color: var(--white) !important; border-bottom: none !important; }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--navy);
+    position: relative;
+    overflow: hidden;
+    padding: 90px 40px 80px;
+    min-height: 480px;
+    display: flex;
+    align-items: center;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse 60% 80% at 80% 50%, rgba(232,101,26,0.18) 0%, transparent 65%),
+      radial-gradient(ellipse 50% 60% at 10% 80%, rgba(201,168,76,0.1) 0%, transparent 60%);
+  }
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .hero-star {
+    position: absolute;
+    right: 6%;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.07;
+    font-size: 28rem;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+  .hero-content { position: relative; z-index: 2; max-width: 680px; }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(232,101,26,0.18);
+    border: 1px solid rgba(232,101,26,0.4);
+    color: var(--orange-light);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 40px;
+    margin-bottom: 28px;
+  }
+  .hero-badge::before { content: '★'; }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 22px;
+    letter-spacing: -0.02em;
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--orange-light);
+  }
+  .hero p {
+    color: #a8bdd6;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    max-width: 540px;
+    margin-bottom: 40px;
+    font-weight: 300;
+  }
+  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--orange);
+    color: var(--white);
+    padding: 14px 32px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background 0.2s, transform 0.15s;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--orange-light); transform: translateY(-1px); }
+  .btn-outline {
+    background: transparent;
+    color: var(--white);
+    border: 2px solid rgba(255,255,255,0.3);
+    padding: 13px 28px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: border-color 0.2s, background 0.2s;
+    display: inline-block;
+  }
+  .btn-outline:hover { border-color: var(--white); background: rgba(255,255,255,0.08); }
+
+  /* ── ALERT BANNER ── */
+  .alert {
+    background: var(--navy-mid);
+    border-left: 5px solid var(--gold);
+    padding: 18px 40px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    font-size: 0.88rem;
+    color: #c8d8e8;
+    line-height: 1.6;
+  }
+  .alert-icon { font-size: 1.2rem; margin-top: 1px; flex-shrink: 0; }
+  .alert strong { color: var(--gold); }
+
+  /* ── SECTION ── */
+  section { padding: 70px 40px; }
+  .section-inner { max-width: 1100px; margin: 0 auto; }
+  .section-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: rgba(232,101,26,0.25); max-width: 60px; }
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+  }
+  .section-subtitle {
+    color: #5a6a80;
+    font-size: 1rem;
+    line-height: 1.7;
+    max-width: 580px;
+    margin-bottom: 50px;
+  }
+
+  /* ── STEPS ── */
+  .steps-bg { background: var(--white); }
+  .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2px; margin-top: 50px; }
+  .step-card {
+    background: var(--gray-soft);
+    padding: 38px 32px;
+    position: relative;
+    transition: background 0.2s;
+  }
+  .step-card:hover { background: var(--cream); }
+  .step-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem;
+    font-weight: 900;
+    color: rgba(232,101,26,0.12);
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+  .step-icon { font-size: 1.6rem; margin-bottom: 12px; }
+  .step-card h3 { font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 10px; }
+  .step-card p { font-size: 0.88rem; color: #5a6a80; line-height: 1.65; }
+
+  /* ── BENEFITS CARDS ── */
+  .benefits-bg { background: var(--cream); }
+  .benefits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+  .benefit-card {
+    background: var(--white);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 16px rgba(10,22,40,0.07);
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .benefit-card:hover { box-shadow: 0 8px 32px rgba(10,22,40,0.12); transform: translateY(-3px); }
+  .benefit-header {
+    background: var(--navy);
+    padding: 24px 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .benefit-header.orange { background: var(--orange); }
+  .benefit-header.gold { background: #7a5c20; }
+  .benefit-icon { font-size: 1.8rem; }
+  .benefit-header h3 { color: var(--white); font-size: 1rem; font-weight: 700; line-height: 1.3; }
+  .benefit-body { padding: 24px 28px; }
+  .benefit-body p { font-size: 0.88rem; color: #5a6a80; line-height: 1.7; margin-bottom: 16px; }
+  .benefit-tag {
+    display: inline-block;
+    background: var(--gray-soft);
+    color: var(--navy);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 20px;
+    margin: 3px 3px 0 0;
+  }
+  .benefit-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--orange);
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-decoration: none;
+    margin-top: 18px;
+    letter-spacing: 0.03em;
+  }
+  .benefit-link:hover { gap: 10px; }
+
+  /* ── FAQ ── */
+  .faq-bg { background: var(--navy); }
+  .faq-bg h2 { color: var(--white); }
+  .faq-bg .section-subtitle { color: #7a9ab8; }
+  .faq-list { display: flex; flex-direction: column; gap: 2px; max-width: 780px; }
+  .faq-item { background: rgba(255,255,255,0.04); border-radius: 4px; overflow: hidden; }
+  .faq-q {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 22px 28px;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--white);
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-family: 'Source Sans 3', sans-serif;
+    gap: 16px;
+    transition: background 0.2s;
+  }
+  .faq-q:hover { background: rgba(255,255,255,0.05); }
+  .faq-chevron { font-size: 1.1rem; color: var(--orange); transition: transform 0.3s; flex-shrink: 0; }
+  .faq-item.open .faq-chevron { transform: rotate(180deg); }
+  .faq-a {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.3s;
+    padding: 0 28px;
+  }
+  .faq-a-inner { padding-bottom: 22px; font-size: 0.88rem; color: #8aaac8; line-height: 1.75; }
+  .faq-item.open .faq-a { max-height: 300px; }
+
+  /* ── CONTACT ── */
+  .contact-bg { background: var(--gray-soft); }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: start; }
+  .contact-info h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--navy); margin-bottom: 28px; }
+  .contact-row {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    margin-bottom: 22px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid rgba(0,0,0,0.07);
+  }
+  .contact-row:last-child { border-bottom: none; margin-bottom: 0; }
+  .contact-ico { font-size: 1.4rem; flex-shrink: 0; margin-top: 2px; }
+  .contact-row dt { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--orange); margin-bottom: 4px; }
+  .contact-row dd { font-size: 0.93rem; color: var(--text); line-height: 1.6; }
+  .contact-row a { color: var(--navy); text-decoration: none; font-weight: 600; }
+  .contact-row a:hover { color: var(--orange); }
+  .contact-map {
+    background: var(--navy);
+    border-radius: 8px;
+    overflow: hidden;
+    height: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .map-placeholder {
+    text-align: center;
+    color: #5a7a9a;
+  }
+  .map-pin { font-size: 3rem; margin-bottom: 12px; display: block; }
+  .map-placeholder p { font-size: 0.85rem; }
+  .map-placeholder a {
+    display: inline-block;
+    margin-top: 12px;
+    background: var(--orange);
+    color: var(--white);
+    padding: 10px 22px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 700;
+  }
+  .team-grid { display: flex; flex-direction: column; gap: 14px; margin-top: 32px; }
+  .team-card {
+    background: var(--white);
+    border-radius: 6px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .team-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--navy);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--white); font-weight: 700; font-size: 0.95rem; flex-shrink: 0;
+  }
+  .team-card h4 { font-size: 0.88rem; font-weight: 700; color: var(--navy); margin-bottom: 2px; }
+  .team-card p { font-size: 0.78rem; color: #7a8a9a; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy);
+    color: #6a8aaa;
+    padding: 48px 40px 28px;
+    font-size: 0.82rem;
+  }
+  .footer-inner { max-width: 1100px; margin: 0 auto; }
+  .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 48px; margin-bottom: 40px; }
+  .footer-brand h3 { font-family: 'Playfair Display', serif; color: var(--white); font-size: 1.1rem; margin-bottom: 12px; }
+  .footer-brand p { line-height: 1.8; }
+  footer h4 { color: var(--white); font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 16px; }
+  footer ul { list-style: none; }
+  footer ul li { margin-bottom: 10px; }
+  footer ul a { color: #6a8aaa; text-decoration: none; transition: color 0.2s; }
+  footer ul a:hover { color: var(--orange-light); }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer-bottom a { color: var(--gold); text-decoration: none; }
+
+  /* ── SCROLL ANIMATIONS ── */
+  .fade-up { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fade-up.visible { opacity: 1; transform: none; }
+
+  @media (max-width: 768px) {
+    nav { gap: 0; overflow-x: auto; }
+    nav a.nav-link { padding: 16px 12px; font-size: 0.75rem; }
+    .hero { padding: 60px 24px 56px; }
+    section { padding: 56px 24px; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .footer-top { grid-template-columns: 1fr; gap: 28px; }
+    .topbar { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <span>Sam Houston State University · Huntsville, Texas</span>
+  <span>📞 <a href="tel:9362941440">936.294.1440</a> &nbsp;|&nbsp; ✉ <a href="mailto:vetbenefits@shsu.edu">vetbenefits@shsu.edu</a></span>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">SHSU <span>VBP</span></a>
+  <a href="#benefits" class="nav-link active">Benefits</a>
+  <a href="#how-to-apply" class="nav-link">How to Apply</a>
+  <a href="#faq" class="nav-link">FAQ</a>
+  <a href="#contact" class="nav-link">Contact</a>
+  <a href="https://shsu.edu" class="nav-link nav-cta" target="_blank">Submit Documents →</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-star">★</div>
+  <div class="hero-content">
+    <div class="hero-badge">Sam Houston State University</div>
+    <h1>Your Service<br><em>Earns Your</em><br>Education</h1>
+    <p>Whether you're a veteran, active service member, or dependent — our team ensures your transition to SHSU is seamless. We handle your VA and TVC education benefits so you can focus on what matters most.</p>
+    <div class="hero-actions">
+      <a href="#how-to-apply" class="btn-primary">Get Started</a>
+      <a href="#benefits" class="btn-outline">Explore Benefits</a>
+    </div>
+  </div>
+</div>
+
+<!-- ALERT -->
+<div class="alert">
+  <span class="alert-icon">⚠️</span>
+  <div><strong>Important:</strong> All documents must be submitted through our <strong>online certification request system</strong>. Documents submitted via email, fax, or mail will <strong>not</strong> be accepted. Please log into the MySam Portal to begin.</div>
+</div>
+
+<!-- HOW TO APPLY -->
+<section class="steps-bg" id="how-to-apply">
+  <div class="section-inner">
+    <div class="section-label">Process</div>
+    <h2>How to Use Your Benefits</h2>
+    <p class="section-subtitle">Follow these steps to certify your education benefits at SHSU each semester.</p>
+    <div class="steps-grid fade-up">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <div class="step-icon">📋</div>
+        <h3>Determine Your Benefit</h3>
+        <p>Find out which VA chapter or state benefit applies to you — GI Bill®, Hazlewood Act, Tuition Assistance, or another program. Visit VA.gov or contact our office.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <div class="step-icon">📄</div>
+        <h3>Gather Your Documents</h3>
+        <p>Obtain your Certificate of Eligibility (COE), DD-214, or authorization forms from your branch or the VA. First-time users only need to submit the COE once.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <div class="step-icon">🖥️</div>
+        <h3>Submit Online</h3>
+        <p>Log in to the MySam Portal and upload all required documents through our secure certification request system. No paper, fax, or email submissions accepted.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">04</div>
+        <div class="step-icon">✅</div>
+        <h3>Get Certified</h3>
+        <p>Our team certifies your enrollment with the VA or TVC. You'll receive timely updates to ensure you meet all deadlines and requirements each term.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section class="benefits-bg" id="benefits">
+  <div class="section-inner">
+    <div class="section-label">Programs</div>
+    <h2>Benefits We Process</h2>
+    <p class="section-subtitle">We support a wide range of VA and state educational benefit programs for military-affiliated students.</p>
+    <div class="benefits-grid fade-up">
+
+      <div class="benefit-card">
+        <div class="benefit-header">
+          <span class="benefit-icon">🎓</span>
+          <h3>GI Bill® — Chapter 33 (Post-9/11)</h3>
+        </div>
+        <div class="benefit-body">
+          <p>Covers tuition and fees paid directly to SHSU, plus a monthly housing allowance (BAH) and a books/supplies stipend — based on your percentage of eligibility.</p>
+          <span class="benefit-tag">Tuition Direct Pay</span>
+          <span class="benefit-tag">Monthly BAH</span>
+          <span class="benefit-tag">Book Stipend</span>
+          <a href="https://www.va.gov/education/about-gi-bill-benefits/" class="benefit-link" target="_blank">Learn more →</a>
+        </div>
+      </div>
+
+      <div class="benefit-card">
+        <div class="benefit-header">
+          <span class="benefit-icon">⭐</span>
+          <h3>Hazlewood Act (Texas)</h3>
+        </div>
+        <div class="benefit-body">
+          <p>Texas honors its veterans with up to 150 tuition-exempt credit hours for eligible veterans who entered service with Texas as their home of record or place of entry.</p>
+          <span class="benefit-tag">150 Credit Hours</span>
+          <span class="benefit-tag">Texas Veterans</span>
+          <span class="benefit-tag">Legacy Option</span>
+          <a href="#contact" class="benefit-link">Check eligibility →</a>
+        </div>
+      </div>
+
+      <div class="benefit-card">
+        <div class="benefit-header orange">
+          <span class="benefit-icon">🪖</span>
+          <h3>Chapter 31 — VR&amp;E</h3>
+        </div>
+        <div class="benefit-body">
+          <p>Veteran Readiness &amp; Employment pays tuition and fees directly via Purchase Order and may include a book stipend for eligible undergraduates. Work with your VRE counselor.</p>
+          <span class="benefit-tag">Direct Pay</span>
+          <span class="benefit-tag">Books Covered</span>
+          <a href="https://www.va.gov/careers-employment/vocational-rehabilitation/" class="benefit-link" target="_blank">Learn more →</a>
+        </div>
+      </div>
+
+      <div class="benefit-card">
+        <div class="benefit-header">
+          <span class="benefit-icon">🏅</span>
+          <h3>Military Tuition Assistance</h3>
+        </div>
+        <div class="benefit-body">
+          <p>Each military branch administers TA differently. Active-duty students must get ESO approval before enrolling. Air Force uses AFVEC; Army uses ArmyIgnitED.</p>
+          <span class="benefit-tag">Active Duty</span>
+          <span class="benefit-tag">Branch Specific</span>
+          <a href="#contact" class="benefit-link">Get guidance →</a>
+        </div>
+      </div>
+
+      <div class="benefit-card">
+        <div class="benefit-header gold">
+          <span class="benefit-icon">📚</span>
+          <h3>Other VA Chapters</h3>
+        </div>
+        <div class="benefit-body">
+          <p>We also certify Chapter 30 (Montgomery GI Bill), Chapter 35 (Survivors &amp; Dependents), and Chapter 1606 (Selected Reserve). Contact us to confirm your chapter.</p>
+          <span class="benefit-tag">Ch. 30</span>
+          <span class="benefit-tag">Ch. 35</span>
+          <span class="benefit-tag">Ch. 1606</span>
+          <a href="#contact" class="benefit-link">Contact our office →</a>
+        </div>
+      </div>
+
+      <div class="benefit-card">
+        <div class="benefit-header">
+          <span class="benefit-icon">👨‍👩‍👧</span>
+          <h3>Dependents &amp; Survivors</h3>
+        </div>
+        <div class="benefit-body">
+          <p>Eligible spouses and children of veterans may qualify for transferred GI Bill entitlement, Hazlewood Legacy benefits, or Chapter 35 survivors &amp; dependents education assistance.</p>
+          <span class="benefit-tag">Survivors</span>
+          <span class="benefit-tag">Dependents</span>
+          <a href="#contact" class="benefit-link">Learn more →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-bg" id="faq">
+  <div class="section-inner">
+    <div class="section-label" style="color: var(--gold);">Common Questions</div>
+    <h2>Frequently Asked Questions</h2>
+    <p class="section-subtitle">Quick answers to the questions we hear most often.</p>
+    <div class="faq-list fade-up">
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Do I need a new Certificate of Eligibility (COE) every semester?
+          <span class="faq-chevron">▾</span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">No. You only need to submit your COE once through the MySam Portal. After your first submission it remains on file with our office.</div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Will the VA pay my tuition directly to SHSU?
+          <span class="faq-chevron">▾</span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">Chapter 33 (Post-9/11) pays tuition and fees directly to SHSU based on your entitlement percentage. Chapter 31 (VR&E) pays via a Purchase Order. Other chapters pay benefits directly to the student.</div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          What counts as "full-time" for my VA housing allowance?
+          <span class="faq-chevron">▾</span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">The VA calculates rate of pursuit by dividing your credit hours by the full-time equivalent (12 hours for fall/spring undergrad). You must have a rate of pursuit above 51% to receive a housing allowance. Summer sessions are evaluated separately. Online-only students receive half the national average BAH.</div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Will the VA pay for courses outside my degree plan?
+          <span class="faq-chevron">▾</span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">No. The VA will not certify courses that are not part of your approved degree plan. Your academic advisor must submit a Degree Plan Exception Form to the Registrar's Office and it must be reflected in Degree Works before we can certify those courses.</div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          What happens if I'm deployed mid-semester?
+          <span class="faq-chevron">▾</span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">Texas state statutes offer three options: a full refund of tuition and fees, an Incomplete grade (X) in all courses, or a final grade if you've completed substantial coursework. Contact our office immediately with your military orders. Note that refunds are not available for voluntary enlistment.</div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Does Hazlewood cover housing, meals, or books?
+          <span class="faq-chevron">▾</span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">No. Hazlewood exempts tuition only and does not cover housing, meals, or book stipends. Additionally, the waiver may not fully cover all fees. You may be able to combine Hazlewood with other benefits — contact us for guidance.</div></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-bg" id="contact">
+  <div class="section-inner">
+    <div class="section-label">Reach Us</div>
+    <h2>Contact Our Office</h2>
+    <p class="section-subtitle">Our certified school officials are here Monday through Friday to answer your questions and guide you through the benefits process.</p>
+    <div class="contact-grid fade-up">
+      <div>
+        <div class="contact-info">
+          <h3>Veterans Benefits Processing</h3>
+          <dl>
+            <div class="contact-row">
+              <span class="contact-ico">🕐</span>
+              <div>
+                <dt>Office Hours</dt>
+                <dd>Monday – Friday, 8:00 AM – 5:00 PM</dd>
+              </div>
+            </div>
+            <div class="contact-row">
+              <span class="contact-ico">📞</span>
+              <div>
+                <dt>Phone</dt>
+                <dd><a href="tel:9362941440">936.294.1440</a></dd>
+              </div>
+            </div>
+            <div class="contact-row">
+              <span class="contact-ico">✉️</span>
+              <div>
+                <dt>Email</dt>
+                <dd><a href="mailto:vetbenefits@shsu.edu">vetbenefits@shsu.edu</a></dd>
+              </div>
+            </div>
+            <div class="contact-row">
+              <span class="contact-ico">📍</span>
+              <div>
+                <dt>Office Location</dt>
+                <dd>Estill Building, Suite 228<br>1903 University Avenue<br>Huntsville, Texas 77340</dd>
+              </div>
+            </div>
+          </dl>
+        </div>
+        <div class="team-grid" style="margin-top: 32px;">
+          <h3 style="font-family:'Playfair Display',serif; color:var(--navy); font-size:1.1rem; margin-bottom:4px;">Meet the Team</h3>
+          <div class="team-card">
+            <div class="team-avatar">BP</div>
+            <div>
+              <h4>Becky Paschal</h4>
+              <p>Lead Military Benefits Specialist</p>
+            </div>
+          </div>
+          <div class="team-card">
+            <div class="team-avatar">SV</div>
+            <div>
+              <h4>Shay Vonlossberg-Saiger</h4>
+              <p>Veteran Benefits Support Specialist</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="contact-map">
+          <div class="map-placeholder">
+            <span class="map-pin">📍</span>
+            <p style="color:#8aaac8; font-size: 1rem; font-weight: 600;">Estill Building, Suite 228</p>
+            <p>1903 University Avenue<br>Huntsville, Texas 77340</p>
+            <a href="https://maps.google.com/?q=1903+University+Avenue+Huntsville+Texas" target="_blank">Open in Google Maps →</a>
+          </div>
+        </div>
+        <div style="margin-top: 24px; background: var(--white); border-radius: 8px; padding: 28px; box-shadow: 0 2px 12px rgba(0,0,0,0.06);">
+          <h4 style="color: var(--navy); font-size: 0.95rem; margin-bottom: 16px;">Veterans Resource Center</h4>
+          <p style="font-size: 0.85rem; color: #5a6a80; line-height: 1.7; margin-bottom: 14px;">For peer support, events, and student veteran community — visit the Veterans Resource Center at 1802 Avenue I, Suite 327.</p>
+          <p style="font-size: 0.85rem; color: #5a6a80;">📞 936.294.1046 &nbsp;|&nbsp; Mon–Fri, 8AM–5PM</p>
+          <a href="https://www.va.gov/" target="_blank" style="display:inline-block; margin-top: 16px; color: var(--orange); font-weight: 700; font-size: 0.85rem; text-decoration: none;">VA.gov — Apply for Benefits →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <h3>Veterans Benefits Processing</h3>
+        <p>Dedicated to honoring the service of military-affiliated students at Sam Houston State University by providing expert guidance and access to the educational benefits they've earned.</p>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="https://www.va.gov/education/">VA Education Benefits</a></li>
+          <li><a href="https://tvc.texas.gov/">Texas Veterans Commission</a></li>
+          <li><a href="https://www.shsu.edu/">SHSU Home</a></li>
+          <li><a href="https://shsu.edu">MySam Portal</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Benefits Programs</h4>
+        <ul>
+          <li><a href="#benefits">Post-9/11 GI Bill®</a></li>
+          <li><a href="#benefits">Hazlewood Act</a></li>
+          <li><a href="#benefits">VR&amp;E (Ch. 31)</a></li>
+          <li><a href="#benefits">Tuition Assistance</a></li>
+          <li><a href="#benefits">Other Chapters</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Sam Houston State University · Veterans Benefits Processing</span>
+      <span>GI Bill® is a registered trademark of the <a href="https://www.va.gov/" target="_blank">U.S. Department of Veterans Affairs</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // FAQ toggle
+  function toggleFaq(btn) {
+    const item = btn.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+
+  // Scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // Nav active state on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('nav a.nav-link:not(.nav-cta)');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(sec => {
+      if (window.scrollY >= sec.offsetTop - 120) current = sec.getAttribute('id');
+    });
+    navLinks.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  });
+</script>
+</body>
 </html>
