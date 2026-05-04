@@ -1335,21 +1335,53 @@ window.difyChatbotConfig = {
 </script>
 <script src="https://udify.app/embed.min.js" id="kxDvPiTeHgJGrqHZ" defer></script>
 <style>
-  /* Match site colors */
+  /* ── Fixed position — always visible while scrolling ── */
   #dify-chatbot-bubble-button {
+    position: fixed !important;
+    bottom: 28px !important;
+    right: 28px !important;
+    z-index: 9999 !important;
+
+    /* Match site navy, with orange on hover */
     background-color: #1c2b4a !important;
+    border: 2px solid rgba(255,255,255,.15) !important;
+    box-shadow: 0 4px 20px rgba(28,43,74,.35) !important;
+    transition: background-color .18s, box-shadow .18s, transform .18s !important;
   }
   #dify-chatbot-bubble-button:hover {
     background-color: #c05a10 !important;
+    box-shadow: 0 6px 24px rgba(192,90,16,.4) !important;
+    transform: translateY(-2px) !important;
   }
+
+  /* ── Chat window — fixed, anchored above the button ── */
   #dify-chatbot-bubble-window {
-    width: 24rem !important;
-    height: 40rem !important;
+    position: fixed !important;
+    bottom: 90px !important;
+    right: 28px !important;
+    z-index: 9998 !important;
+    width: 23rem !important;
+    height: 38rem !important;
+
+    /* Match site card style */
+    border-radius: 10px !important;
+    border: 1.5px solid #dde2ec !important;
+    box-shadow: 0 8px 40px rgba(28,43,74,.18) !important;
+    overflow: hidden !important;
   }
-  /* Keep bubble above all site content */
-  #dify-chatbot-bubble-button,
-  #dify-chatbot-bubble-window {
-    z-index: 9999 !important;
+
+  /* ── Small screens: make window narrower and shorter ── */
+  @media (max-width: 520px) {
+    #dify-chatbot-bubble-window {
+      width: calc(100vw - 24px) !important;
+      right: 12px !important;
+      height: 70vh !important;
+      bottom: 80px !important;
+    }
+    #dify-chatbot-bubble-button {
+      right: 16px !important;
+      bottom: 20px !important;
+    }
   }
 </style>
 
