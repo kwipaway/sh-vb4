@@ -1324,6 +1324,35 @@ footer {
   </div>
 </footer>
 
+<!-- ── DIFY CHATBOT ── -->
+<script>
+window.difyChatbotConfig = {
+  token: 'kxDvPiTeHgJGrqHZ',
+  inputs: {},
+  systemVariables: {},
+  userVariables: {},
+}
+</script>
+<script src="https://udify.app/embed.min.js" id="kxDvPiTeHgJGrqHZ" defer></script>
+<style>
+  /* Match site colors */
+  #dify-chatbot-bubble-button {
+    background-color: #1c2b4a !important;
+  }
+  #dify-chatbot-bubble-button:hover {
+    background-color: #c05a10 !important;
+  }
+  #dify-chatbot-bubble-window {
+    width: 24rem !important;
+    height: 40rem !important;
+  }
+  /* Keep bubble above all site content */
+  #dify-chatbot-bubble-button,
+  #dify-chatbot-bubble-window {
+    z-index: 9999 !important;
+  }
+</style>
+
 <script>
 const PAGES = ['home','federal','hazlewood','active','faq','contact'];
 
